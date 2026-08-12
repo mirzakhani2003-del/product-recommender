@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { getProducts } from "./services/productApi";
+import ProductList from "./components/ProductList/ProductList";
 
 function App() {
   const [products, setProducts] = useState([]);
@@ -30,13 +31,11 @@ function App() {
   }
 
   return (
-    <div>
+    <main>
       <h1>Product Recommender</h1>
 
-      <p>Products : {products.length}</p>
-
-      <pre>{JSON.stringify(products, null, 2)}</pre>
-    </div>
+      <ProductList products={products}/>
+    </main>
   );
 }
 
