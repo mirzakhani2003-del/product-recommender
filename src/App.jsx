@@ -8,32 +8,108 @@ import useDebouce from "./hooks/useDebounce";
 import { SearchBar } from "./components/SearchBar/SearchBar";
 import { Cart } from "./components/Cart/Cart";
 
+const STORAGE_KEY = "product-recommender-state";
+const PRODUCTS_CACHE_KEY = "product-recommender-products";
+const CACHE_DURATION = 10 * 60 * 1000;
+
+function getSavedState() {
+  const savedState = localStorage.getItem(STORAGE_KEY);
+
+  if (!savedState) {
+    return null;
+  }
+
+  try {
+    return JSON.parse(savedState);
+  } catch {
+    return null;
+  }
+}
+
 function App() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [selectedCategory, setSelectedCategory] = useState(() => {
+    const savedState = getSavedState();
+
+    return savedState?.selectedCategory ?? "all";
+  });
   const [selectedProduct, setSelectedProduct] = useState(null);
-  const [minPrice, setMinPrice] = useState("");
-  const [maxPrice, setMaxPrice] = useState("");
-  const [search, setSearch] = useState("");
-  const [cart, setCart] = useState([]);
+  const [minPrice, setMinPrice] = useState(() => {
+    const savedState = getSavedState();
+
+    return savedState?.minPrice ?? "";
+  });
+  const [maxPrice, setMaxPrice] = useState(() => {
+    const savedState = getSavedState();
+
+    return savedState?.maxPrice ?? "";
+  });
+  const [search, setSearch] = useState(() => {
+    const savedState = getSavedState();
+
+    return savedState?.search ?? "";
+  });
+  const [cart, setCart] = useState(() => {
+    const savedState = getSavedState();
+
+    return savedState?.cart ?? [];
+  });
 
   console.log("cart", cart);
 
   const debounedSearch = useDebouce(search, 1000);
 
   useEffect(() => {
-    async function fetchProducts() {
+    const stateToSave = {
+      cart,
+      selectedCategory,
+      minPrice,
+      maxPrice,
+      search,
+    };
+
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(stateToSave));
+  }, [cart, selectedCategory, minPrice, maxPrice, search]);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
       try {
+        setLoading(true);
+
+        const cachedData = localStorage.getItem(PRODUCTS_CACHE_KEY);
+
+        if (cachedData) {
+          const parsedCache = JSON.parse(cachedData);
+
+          const isCacheValid =
+            Date.now() - parsedCache.timestamp < CACHE_DURATION;
+
+          if (isCacheValid) {
+            setProducts(parsedCache.products);
+            setLoading(false);
+            return;
+          }
+        }
+
         const data = await getProducts();
+
         setProducts(data);
+
+        localStorage.setItem(
+          PRODUCTS_CACHE_KEY,
+          JSON.stringify({
+            products: data,
+            timestamp: Date.now(),
+          }),
+        );
       } catch (error) {
-        setError(error.message);
+        setError("Failed to load products.");
       } finally {
         setLoading(false);
       }
-    }
+    };
 
     fetchProducts();
   }, []);
@@ -143,7 +219,12 @@ function App() {
         onMaxPriceChange={setMaxPrice}
       />
 
-      <Cart cart={cart} onRemove={removeFromCart} onIncrease={increaseQuantity} onDecrease={decreaseQuantity} />
+      <Cart
+        cart={cart}
+        onRemove={removeFromCart}
+        onIncrease={increaseQuantity}
+        onDecrease={decreaseQuantity}
+      />
 
       <ProductList
         products={filteredProducts}
