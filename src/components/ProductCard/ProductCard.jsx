@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./productcard.module.scss";
 
-const ProductCard = ({ product, onSelect }) => {
+const ProductCard = ({ product, onSelect, onAddToCart }) => {
   return (
     <article className={styles.productCard} onClick={() => onSelect(product)}>
       <div className={styles.ProductCard__image}>
@@ -15,6 +15,11 @@ const ProductCard = ({ product, onSelect }) => {
 
         <p className={styles.ProductCard__category}>{product.category}</p>
       </div>
+
+      <button onClick={(event) => {
+        event.stopPropagation();
+        onAddToCart(product);
+      }}>Add To Cart</button>
     </article>
   );
 };

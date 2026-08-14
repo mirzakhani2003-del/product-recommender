@@ -2,7 +2,7 @@ import React from "react";
 import ProductCard from "../ProductCard/ProductCard";
 import styles from "./recommend.module.scss";
 
-export const RecommendationList = ({ selectedProduct, products }) => {
+export const RecommendationList = ({ selectedProduct, products, onAddToCart }) => {
   if (!selectedProduct) {
     return null;
   }
@@ -19,7 +19,7 @@ export const RecommendationList = ({ selectedProduct, products }) => {
 
       <div className={styles.productList}>
         {recommendedProducts.map((product) => (
-          <ProductCard key={product.id} product={product} />
+          <ProductCard key={product.id} product={product} onAddToCart={onAddToCart}/>
         ))}
       </div>
     </section>

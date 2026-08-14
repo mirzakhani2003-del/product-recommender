@@ -6,6 +6,7 @@ import { RecommendationList } from "./components/RecommendationList/Recommendati
 import { PriceFilter } from "./components/PriceFilter/PriceFilter";
 import useDebouce from "./hooks/useDebounce";
 import { SearchBar } from "./components/SearchBar/SearchBar";
+import { Cart } from "./components/Cart/Cart";
 
 function App() {
   const [products, setProducts] = useState([]);
@@ -16,6 +17,9 @@ function App() {
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
   const [search, setSearch] = useState("");
+  const [cart, setCart] = useState([]);
+
+  console.log("cart", cart);
 
   const debounedSearch = useDebouce(search, 1000);
 
@@ -37,10 +41,15 @@ function App() {
   const categories = [...new Set(products.map((product) => product.category))];
 
   const filteredProducts = products.filter((product) => {
-    const matchesCategory = selectedCategory === "all" || product.category === selectedCategory;
-    const matchesMinPrice = minPrice === "" || product.price >= Number(minPrice);
-    const matchesMaxPrice = maxPrice === "" || product.price <= Number(maxPrice);
-    const matchesSearch = product.title.toLowerCase().includes(debounedSearch.toLowerCase());
+    const matchesCategory =
+      selectedCategory === "all" || product.category === selectedCategory;
+    const matchesMinPrice =
+      minPrice === "" || product.price >= Number(minPrice);
+    const matchesMaxPrice =
+      maxPrice === "" || product.price <= Number(maxPrice);
+    const matchesSearch = product.title
+      .toLowerCase()
+      .includes(debounedSearch.toLowerCase());
 
     return (
       matchesCategory && matchesMinPrice && matchesMaxPrice && matchesSearch
@@ -55,6 +64,66 @@ function App() {
     return <h1>Error: {error}</h1>;
   }
 
+  const addToCart = (product) => {
+    setCart((currentCart) => {
+      const existingProduct = currentCart.find(
+        (item) => item.id === product.id,
+      );
+
+      if (existingProduct) {
+        return currentCart.map((item) =>
+          item.id === product.id
+            ? {
+                ...item,
+                quantity: item.quantity + 1,
+              }
+            : item,
+        );
+      }
+
+      return [
+        ...currentCart,
+        {
+          ...product,
+          quantity: 1,
+        },
+      ];
+    });
+  };
+
+  const increaseQuantity = (productId) => {
+    setCart((currentCart) =>
+      currentCart.map((item) =>
+        item.id === productId
+          ? {
+              ...item,
+              quantity: item.quantity + 1,
+            }
+          : item,
+      ),
+    );
+  };
+
+  const decreaseQuantity = (productId) => {
+    setCart((currentCart) =>
+      currentCart
+        .map((item) =>
+          item.id === productId
+            ? {
+                ...item,
+                quantity: item.quantity - 1,
+              }
+            : item,
+        )
+        .filter((item) => item.quantity > 0),
+    );
+  };
+
+  const removeFromCart = (productId) => {
+    setCart((currentCart) =>
+      currentCart.filter((item) => item.id !== productId),
+    );
+  };
   return (
     <main>
       <h1>Product Recommender</h1>
@@ -67,11 +136,26 @@ function App() {
         onCategoryChange={setSelectedCategory}
       />
 
-      <PriceFilter minPrice={minPrice} maxPrice={maxPrice} onMinPriceChange={setMinPrice} onMaxPriceChange={setMaxPrice} />
+      <PriceFilter
+        minPrice={minPrice}
+        maxPrice={maxPrice}
+        onMinPriceChange={setMinPrice}
+        onMaxPriceChange={setMaxPrice}
+      />
 
-      <ProductList products={filteredProducts} onSelect={setSelectedProduct}/>
+      <Cart cart={cart} onRemove={removeFromCart} onIncrease={increaseQuantity} onDecrease={decreaseQuantity} />
 
-      <RecommendationList selectedProduct={selectedProduct} products={products}/>
+      <ProductList
+        products={filteredProducts}
+        onSelect={setSelectedProduct}
+        onAddToCart={addToCart}
+      />
+
+      <RecommendationList
+        selectedProduct={selectedProduct}
+        products={products}
+        onAddToCart={addToCart}
+      />
     </main>
   );
 }
