@@ -7,6 +7,7 @@ import { PriceFilter } from "./components/PriceFilter/PriceFilter";
 import useDebouce from "./hooks/useDebounce";
 import { SearchBar } from "./components/SearchBar/SearchBar";
 import { Cart } from "./components/Cart/Cart";
+import { Header } from "./components/Header/Header";
 
 const STORAGE_KEY = "product-recommender-state";
 const PRODUCTS_CACHE_KEY = "product-recommender-products";
@@ -201,43 +202,46 @@ function App() {
     );
   };
   return (
-    <main>
-      <h1>Product Recommender</h1>
-
-      <SearchBar search={search} onSearchChange={setSearch} />
-
-      <CategoryFilter
-        categories={categories}
-        selectedCategory={selectedCategory}
-        onCategoryChange={setSelectedCategory}
+    <>
+      <Header
+        cartCount={cart.reduce((total, item) => total + item.quantity, 0)}
       />
+      <main>
+        <SearchBar search={search} onSearchChange={setSearch} />
 
-      <PriceFilter
-        minPrice={minPrice}
-        maxPrice={maxPrice}
-        onMinPriceChange={setMinPrice}
-        onMaxPriceChange={setMaxPrice}
-      />
+        <CategoryFilter
+          categories={categories}
+          selectedCategory={selectedCategory}
+          onCategoryChange={setSelectedCategory}
+        />
 
-      <Cart
-        cart={cart}
-        onRemove={removeFromCart}
-        onIncrease={increaseQuantity}
-        onDecrease={decreaseQuantity}
-      />
+        <PriceFilter
+          minPrice={minPrice}
+          maxPrice={maxPrice}
+          onMinPriceChange={setMinPrice}
+          onMaxPriceChange={setMaxPrice}
+        />
 
-      <ProductList
-        products={filteredProducts}
-        onSelect={setSelectedProduct}
-        onAddToCart={addToCart}
-      />
+        <Cart
+          cart={cart}
+          onRemove={removeFromCart}
+          onIncrease={increaseQuantity}
+          onDecrease={decreaseQuantity}
+        />
 
-      <RecommendationList
-        selectedProduct={selectedProduct}
-        products={products}
-        onAddToCart={addToCart}
-      />
-    </main>
+        <ProductList
+          products={filteredProducts}
+          onSelect={setSelectedProduct}
+          onAddToCart={addToCart}
+        />
+
+        <RecommendationList
+          selectedProduct={selectedProduct}
+          products={products}
+          onAddToCart={addToCart}
+        />
+      </main>
+    </>
   );
 }
 

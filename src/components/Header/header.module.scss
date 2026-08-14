@@ -1,0 +1,30 @@
+.header {
+    background-color: #fff;
+    border-bottom: 1px solid #dfe6e9;
+    padding: 1rem 9rem;
+    border-radius: 8px;
+
+    &__container {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    &__logo {
+        margin: 0;
+        font-size: 1.4rem;
+    }
+
+    &__cart {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.6rem 1rem;
+        border-radius: 8px;
+        background-color: #6c5c37;
+        color: #fff;
+        font-weight: 600;
+    }
+}
