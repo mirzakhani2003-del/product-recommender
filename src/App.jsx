@@ -4,6 +4,8 @@ import ProductList from "./components/ProductList/ProductList";
 import { CategoryFilter } from "./components/categoryFilter/CategoryFilter";
 import { RecommendationList } from "./components/RecommendationList/RecommendationList";
 import { PriceFilter } from "./components/PriceFilter/PriceFilter";
+import useDebouce from "./hooks/useDebounce";
+import { SearchBar } from "./components/SearchBar/SearchBar";
 
 function App() {
   const [products, setProducts] = useState([]);
@@ -13,6 +15,9 @@ function App() {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
+  const [search, setSearch] = useState("");
+
+  const debounedSearch = useDebouce(search, 1000);
 
   useEffect(() => {
     async function fetchProducts() {
@@ -35,9 +40,10 @@ function App() {
     const matchesCategory = selectedCategory === "all" || product.category === selectedCategory;
     const matchesMinPrice = minPrice === "" || product.price >= Number(minPrice);
     const matchesMaxPrice = maxPrice === "" || product.price <= Number(maxPrice);
+    const matchesSearch = product.title.toLowerCase().includes(debounedSearch.toLowerCase());
 
     return (
-      matchesCategory && matchesMinPrice && matchesMaxPrice
+      matchesCategory && matchesMinPrice && matchesMaxPrice && matchesSearch
     );
   });
 
@@ -52,6 +58,8 @@ function App() {
   return (
     <main>
       <h1>Product Recommender</h1>
+
+      <SearchBar search={search} onSearchChange={setSearch} />
 
       <CategoryFilter
         categories={categories}
