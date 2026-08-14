@@ -1,0 +1,19 @@
+.categoryFilter {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+
+  button {
+    padding: 0.5rem 1rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background-color: white;
+    cursor: pointer;
+
+    &.active {
+      background-color: #6c5ce7;
+      color: white;
+    }
+  }
+}
