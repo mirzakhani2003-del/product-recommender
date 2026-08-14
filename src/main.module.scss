@@ -1,15 +1,10 @@
 * {
-    box-sizing: border-box;
-    margin: 0;
+  box-sizing: border-box;
+  margin: 0;
 }
 
 body {
-    font-family: 'Times New Roman', Times, serif;
-    padding: 1rem;
-    background-color: #ddd;
-}
-
-main {
-    width: min(1400px, 92%);
-    margin: 0 auto;
+  font-family: "Times New Roman", Times, serif;
+  background-color: #ddd;
+  color: #2d3436;
 }

@@ -1,7 +1,19 @@
 .priceFilter {
-    margin-top: 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 1rem;
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1rem;
+}
+
+input {
+  width: 100%;
+  padding: 0.3rem 1rem;
+  border-radius: 8px;
+  outline: none;
+  border: none;
+
+  &:focus {
+    border-color: #6c5ce7;
+  }
 }

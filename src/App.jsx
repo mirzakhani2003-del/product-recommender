@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import styles from "./app.module.scss";
 import { getProducts } from "./services/productApi";
 import ProductList from "./components/ProductList/ProductList";
 import { CategoryFilter } from "./components/categoryFilter/CategoryFilter";
@@ -134,11 +135,21 @@ function App() {
   });
 
   if (loading) {
-    return <h1>Loading</h1>;
+    return (
+      <div className={styles.loadingState}>
+        <div className={styles.spinner}></div>
+        <p>Loading Products ...</p>
+      </div>
+    );
   }
 
   if (error) {
-    return <h1>Error: {error}</h1>;
+    return (
+      <div className={styles.errorState}>
+        <h2>Something Went Wrrong</h2>
+        <p>{error}</p>
+      </div>
+    );
   }
 
   const addToCart = (product) => {
@@ -201,26 +212,29 @@ function App() {
       currentCart.filter((item) => item.id !== productId),
     );
   };
+
   return (
     <>
       <Header
         cartCount={cart.reduce((total, item) => total + item.quantity, 0)}
       />
       <main>
-        <SearchBar search={search} onSearchChange={setSearch} />
+        <div className={styles.filters}>
+          <SearchBar search={search} onSearchChange={setSearch} />
 
-        <CategoryFilter
-          categories={categories}
-          selectedCategory={selectedCategory}
-          onCategoryChange={setSelectedCategory}
-        />
+          <CategoryFilter
+            categories={categories}
+            selectedCategory={selectedCategory}
+            onCategoryChange={setSelectedCategory}
+          />
 
-        <PriceFilter
-          minPrice={minPrice}
-          maxPrice={maxPrice}
-          onMinPriceChange={setMinPrice}
-          onMaxPriceChange={setMaxPrice}
-        />
+          <PriceFilter
+            minPrice={minPrice}
+            maxPrice={maxPrice}
+            onMinPriceChange={setMinPrice}
+            onMaxPriceChange={setMaxPrice}
+          />
+        </div>
 
         <Cart
           cart={cart}
