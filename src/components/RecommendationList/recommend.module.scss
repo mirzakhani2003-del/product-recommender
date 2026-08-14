@@ -1,0 +1,15 @@
+.recommendations {
+  margin-top: 4rem;
+  padding-top: 2rem;
+  border-top: 1px solid #dfe6e9;
+
+  h2 {
+    margin-bottom: 1.5rem;
+  }
+
+  .productList {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+  }
+}

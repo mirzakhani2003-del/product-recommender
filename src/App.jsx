@@ -2,14 +2,16 @@ import { useEffect, useState } from "react";
 import { getProducts } from "./services/productApi";
 import ProductList from "./components/ProductList/ProductList";
 import { CategoryFilter } from "./components/categoryFilter/CategoryFilter";
+import { RecommendationList } from "./components/RecommendationList/RecommendationList";
 
 function App() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState("all");
+  const [selectedProduct, setSelectedProduct] = useState(null);
 
-  console.log("selected Category", selectedCategory);
+  console.log("selected Product", selectedProduct);
 
   useEffect(() => {
     async function fetchProducts() {
@@ -51,7 +53,9 @@ function App() {
         onCategoryChange={setSelectedCategory}
       />
 
-      <ProductList products={filteredProducts} />
+      <ProductList products={filteredProducts} onSelect={setSelectedProduct}/>
+
+      <RecommendationList selectedProduct={selectedProduct} products={products}/>
     </main>
   );
 }
