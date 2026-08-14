@@ -3,6 +3,7 @@ import { getProducts } from "./services/productApi";
 import ProductList from "./components/ProductList/ProductList";
 import { CategoryFilter } from "./components/categoryFilter/CategoryFilter";
 import { RecommendationList } from "./components/RecommendationList/RecommendationList";
+import { PriceFilter } from "./components/PriceFilter/PriceFilter";
 
 function App() {
   const [products, setProducts] = useState([]);
@@ -10,8 +11,8 @@ function App() {
   const [error, setError] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [selectedProduct, setSelectedProduct] = useState(null);
-
-  console.log("selected Product", selectedProduct);
+  const [minPrice, setMinPrice] = useState("");
+  const [maxPrice, setMaxPrice] = useState("");
 
   useEffect(() => {
     async function fetchProducts() {
@@ -30,10 +31,15 @@ function App() {
 
   const categories = [...new Set(products.map((product) => product.category))];
 
-  const filteredProducts =
-    selectedCategory === "all"
-      ? products
-      : products.filter((product) => product.category === selectedCategory);
+  const filteredProducts = products.filter((product) => {
+    const matchesCategory = selectedCategory === "all" || product.category === selectedCategory;
+    const matchesMinPrice = minPrice === "" || product.price >= Number(minPrice);
+    const matchesMaxPrice = maxPrice === "" || product.price <= Number(maxPrice);
+
+    return (
+      matchesCategory && matchesMinPrice && matchesMaxPrice
+    );
+  });
 
   if (loading) {
     return <h1>Loading</h1>;
@@ -52,6 +58,8 @@ function App() {
         selectedCategory={selectedCategory}
         onCategoryChange={setSelectedCategory}
       />
+
+      <PriceFilter minPrice={minPrice} maxPrice={maxPrice} onMinPriceChange={setMinPrice} onMaxPriceChange={setMaxPrice} />
 
       <ProductList products={filteredProducts} onSelect={setSelectedProduct}/>
 
