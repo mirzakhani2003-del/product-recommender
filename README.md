@@ -1,16 +1,46 @@
-# React + Vite
+# Product Recommender 
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A React-based product recommendation system built with Fake Store API.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Fetch products from Fake Store API
+- Product listing
+- Caategory riltering
+- Price range filtering
+- Product search with debounce
+- Similar Product Recommendations
+- Shopping Cart
+- Increase/decrease cart quantity
+- Remove products from cart
+- LocalStorage persistence
+- Product API caching
+- Responsive UI
+- Sass Styling
 
-## React Compiler
+## Technologies
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- React
+- JavaScript
+- Sass
+- Axios
+- Vite
+- LocalStorage
+- Fake Store API
 
-## Expanding the ESLint configuration
+This project uses Fake Store API:
+https://fakestoreapi/products
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Git Workflow
+
+Each major feature was developed in a separate branch and merged into main.
+Feature branches include:
+
+- feature/api
+- feature/categories
+- feature/recommendations
+- feature/price-filter
+- feature/search
+- feature/cart
+- feature/local-storage
+- feature/ui-improvements
