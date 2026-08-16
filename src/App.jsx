@@ -243,15 +243,17 @@ function App() {
           onDecrease={decreaseQuantity}
         />
 
-        <ProductList
-          products={filteredProducts}
-          onSelect={setSelectedProduct}
-          onAddToCart={addToCart}
-        />
-
         <RecommendationList
           selectedProduct={selectedProduct}
           products={products}
+          onAddToCart={addToCart}
+        />
+
+        <h2>All Products</h2>
+
+        <ProductList
+          products={filteredProducts}
+          onSelect={setSelectedProduct}
           onAddToCart={addToCart}
         />
       </main>

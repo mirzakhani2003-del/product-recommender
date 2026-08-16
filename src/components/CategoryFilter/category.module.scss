@@ -12,13 +12,13 @@
     cursor: pointer;
     transition: 0.2s;
 
-    &.hover {
-      transform: translateY(-2px);
-    }
-
     &.active {
       background-color: #6c5ce7;
       color: white;
     }
+  }
+
+  button:hover {
+    transform: translateY(-2px);
   }
 }

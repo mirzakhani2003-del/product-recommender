@@ -13,7 +13,7 @@ input {
   outline: none;
   border: none;
 
-  &:focus {
+  :focus {
     border-color: #6c5ce7;
   }
 }
